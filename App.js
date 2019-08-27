@@ -3,6 +3,7 @@ import {
   StyleSheet,
   View,
   FlatList,
+  Button
 } from 'react-native';
 
 import GoalInput from './components/GoalInput';
@@ -12,12 +13,14 @@ export default function App() {
 
   // using React hooks instead of setState
   const [courseGoals, setCourseGoals] = useState([]);
+  const [isAddModalVisible, setAddModalVisible] = useState(false);
 
   const addGoalHandler = (goalTitle) => {
     setCourseGoals(currentGoals => [
       ...currentGoals,                                      // previous state
       { key: Math.random().toString(), value: goalTitle }  // new element for flat list
     ]);
+    setAddModalVisible(false);
   };
 
   const removeGoalHandler = (goalId) => {
@@ -26,13 +29,22 @@ export default function App() {
     });
   };
 
+  const cancelAddGoalModalHandler = () => {
+    setAddModalVisible(false);
+  };
+
   return (
     <View style={styles.screen}>
     {/* We passed function which can be binded - we can use it in our child component */}
-      <GoalInput onAddGoal={addGoalHandler} />
+
+      <Button title="Add new goal" onPress={() => setAddModalVisible(true)}/>
+      <GoalInput
+        visible={isAddModalVisible}
+        onAddGoal={addGoalHandler}
+        onCancel={cancelAddGoalModalHandler}
+      />
       <FlatList
         data={courseGoals}
-        // renderItem must returns react-dom element
         renderItem={
           itemData => <GoalItem
               title={itemData.item.value} 
@@ -40,8 +52,6 @@ export default function App() {
               onDelete={removeGoalHandler.bind(this, itemData.item.key)}
           />
         }
-        // we can use keyExtractor if we don't want use 'key' or 'id' 
-        // but generate/extract it from other attributes
       />
     </View>
   );
