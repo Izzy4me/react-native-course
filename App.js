@@ -20,6 +20,12 @@ export default function App() {
     ]);
   };
 
+  const removeGoalHandler = (goalId) => {
+    setCourseGoals(currentGoals =>{
+      return currentGoals.filter( goal => goal.key !== goalId);
+    });
+  };
+
   return (
     <View style={styles.screen}>
     {/* We passed function which can be binded - we can use it in our child component */}
@@ -27,7 +33,13 @@ export default function App() {
       <FlatList
         data={courseGoals}
         // renderItem must returns react-dom element
-        renderItem={itemData => <GoalItem title={itemData.item.value} />}
+        renderItem={
+          itemData => <GoalItem
+              title={itemData.item.value} 
+              // We have 2 options here as well - we can pass the id and make bind in the child component
+              onDelete={removeGoalHandler.bind(this, itemData.item.key)}
+          />
+        }
         // we can use keyExtractor if we don't want use 'key' or 'id' 
         // but generate/extract it from other attributes
       />

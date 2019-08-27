@@ -2,14 +2,17 @@ import React from 'react';
 import {
     View,
     Text,
-    StyleSheet
+    StyleSheet,
+    TouchableOpacity
 } from 'react-native';
 
 export default function GoalItem(props) {
     return (
-      <View style={styles.listItem}>
-          <Text>{props.title}</Text>
-      </View>
+      <TouchableOpacity activeOpacity={0.4} onPress={props.onDelete}>
+        <View style={styles.listItem} onTouch>
+            <Text>{props.title}</Text>
+        </View>
+      </TouchableOpacity>
     );
 };
 
