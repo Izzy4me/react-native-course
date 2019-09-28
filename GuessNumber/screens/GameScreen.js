@@ -11,9 +11,11 @@ import {
   Alert,
   Button
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 import NumberContainer from '../components/NumberContainer';
 import Card from '../components/Card';
+import CustomButton from '../components/CustomButton';
 
 
 const generateRandomNumber = (min, max, excluded) => {
@@ -32,16 +34,16 @@ const GameScreen = (props) => {
   const [currentGuess, setCurrentGuess] = useState(generateRandomNumber(0, 100, props.userNumber));
   const [roundsCounter, setRoundsCounter] = useState(0);
 
-  // Number will be guessed from (currentBottomBoundary, currentTopBoundary) 
-  const currentBottomBoundary = useRef(0);
+  // Number will be guessed from <currentBottomBoundary, currentTopBoundary) 
+  const currentBottomBoundary = useRef(1);
   const currentTopBoundary = useRef(100);
   const { userChoice, onGameOver } = props;
 
-  // useEffect(() => {
-  //   if (currentGuess === userChoice) {
-  //     onGameOver(rounds);
-  //   }
-  // }, [currentGuess, userChoice, onGameOver]);
+  useEffect(() => {
+    if (currentGuess === userChoice) {
+      onGameOver(roundsCounter);
+    }
+  }, [currentGuess, userChoice, onGameOver]);
 
   const nextGuessHandler = direction => {
     if (
@@ -71,17 +73,17 @@ const GameScreen = (props) => {
     setRoundsCounter(currentRound => currentRound + 1);
   }
 
-  ///////////
   return (
     <View style={styles.screen}>
       <Text>Opponent's Guess</Text>
       <NumberContainer>{currentGuess}</NumberContainer>
       <Card style={styles.buttonContainer}>
-        <Button title="Lover <" onPress={nextGuessHandler.bind(this, 'lower')} />
-        <Button
-          title="Greater >"
-          onPress={nextGuessHandler.bind(this, 'greater')}
-        />
+        <CustomButton onPress={nextGuessHandler.bind(this, 'lower')}>
+          <Ionicons name="md-remove-circle" size={24}></Ionicons>
+        </CustomButton>
+        <CustomButton onPress={nextGuessHandler.bind(this, 'greater')}>
+            <Ionicons name="md-add-circle" size={24}></Ionicons>
+        </CustomButton>
       </Card>
     </View>
   );
