@@ -7,6 +7,7 @@ import React,
 import { 
   View,
   Text,
+  ScrollView,
   StyleSheet,
   Alert,
   Button
@@ -30,9 +31,19 @@ const generateRandomNumber = (min, max, excluded) => {
   }
 };
 
+const renderListItem = (value, counter) => (
+    <View key={value} style={styles.listItem}>
+      <Text>#{counter} </Text>
+      <Text>{value}</Text>
+    </View>
+);
+
+
 const GameScreen = (props) => {
-  const [currentGuess, setCurrentGuess] = useState(generateRandomNumber(0, 100, props.userNumber));
-  const [roundsCounter, setRoundsCounter] = useState(0);
+  const initialGuess = generateRandomNumber(0, 100, props.userNumber);
+  const [currentGuess, setCurrentGuess] = useState(initialGuess);
+  const [previousGuesses, setPreviousGuesses] = useState([initialGuess]);
+  const [roundsCounter, setRoundsCounter] = useState(0);  //
 
   // Number will be guessed from <currentBottomBoundary, currentTopBoundary) 
   const currentBottomBoundary = useRef(1);
@@ -60,7 +71,7 @@ const GameScreen = (props) => {
       // Not .current is read-only!
       currentTopBoundary.current = currentGuess;
     } else {
-      currentBottomBoundary.current = currentGuess;
+      currentBottomBoundary.current = currentGuess + 1;
     }
 
     // current gives us most recent value of this reference
@@ -70,6 +81,7 @@ const GameScreen = (props) => {
       currentGuess
     );
     setCurrentGuess(nextGuessedNumber);
+    setPreviousGuesses(previousGuesses => [nextGuessedNumber, ...previousGuesses])
     setRoundsCounter(currentRound => currentRound + 1);
   }
 
@@ -85,6 +97,12 @@ const GameScreen = (props) => {
             <Ionicons name="md-add-circle" size={24}></Ionicons>
         </CustomButton>
       </Card>
+      <View style={styles.listContainer}>
+      {/* contentContainerStyle is only way to add alignItems and justifyContent here */}
+        <ScrollView contentContainerStyle={styles.list}>
+          {previousGuesses.map((guess, index) => renderListItem(guess, previousGuesses.length - index))}
+        </ScrollView>
+      </View>
     </View>
   );
 
@@ -102,7 +120,29 @@ const styles = StyleSheet.create({
     marginTop: 20,
     width: 300,
     maxWidth: '80%'
-  }
+  },
+  list: {
+    // "To be able to grow and take as much space as it can get" - perfect for scrollable
+    flexGrow: 1,
+    // Important if list item won't have width of 100%
+    alignItems: 'center',
+  },
+  listItem: {
+    borderColor: 'black',
+    borderWidth: 1,
+    backgroundColor: 'white',
+    padding: 10,
+    marginVertical: 5,
+    // important to keep our list item's 1 per line!
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '60%',
+  },
+  listContainer: {
+    // Flex = 1 is needed on Android to make Scrollable inside really Scrollable
+    flex: 1,
+    width: '80%',
+  },
 });
 
 export default GameScreen;
