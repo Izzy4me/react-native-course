@@ -7,10 +7,10 @@ import React,
 import { 
   View,
   Text,
-  ScrollView,
   StyleSheet,
   Alert,
-  Button
+  Button,
+  FlatList
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -31,19 +31,18 @@ const generateRandomNumber = (min, max, excluded) => {
   }
 };
 
-const renderListItem = (value, counter) => (
-    <View key={value} style={styles.listItem}>
-      <Text>#{counter} </Text>
-      <Text>{value}</Text>
+const renderListItem = (listLength, itemData) => (
+    <View style={styles.listItem}>
+      <Text>#{listLength - itemData.index} </Text>
+      <Text>{itemData.item}</Text>
     </View>
 );
-
 
 const GameScreen = (props) => {
   const initialGuess = generateRandomNumber(0, 100, props.userNumber);
   const [currentGuess, setCurrentGuess] = useState(initialGuess);
-  const [previousGuesses, setPreviousGuesses] = useState([initialGuess]);
-  const [roundsCounter, setRoundsCounter] = useState(0);  //
+  const [previousGuesses, setPreviousGuesses] = useState([initialGuess.toString()]);
+  const [roundsCounter, setRoundsCounter] = useState(0);
 
   // Number will be guessed from <currentBottomBoundary, currentTopBoundary) 
   const currentBottomBoundary = useRef(1);
@@ -81,7 +80,7 @@ const GameScreen = (props) => {
       currentGuess
     );
     setCurrentGuess(nextGuessedNumber);
-    setPreviousGuesses(previousGuesses => [nextGuessedNumber, ...previousGuesses])
+    setPreviousGuesses(previousGuesses => [nextGuessedNumber.toString(), ...previousGuesses])
     setRoundsCounter(currentRound => currentRound + 1);
   }
 
@@ -98,10 +97,12 @@ const GameScreen = (props) => {
         </CustomButton>
       </Card>
       <View style={styles.listContainer}>
-      {/* contentContainerStyle is only way to add alignItems and justifyContent here */}
-        <ScrollView contentContainerStyle={styles.list}>
-          {previousGuesses.map((guess, index) => renderListItem(guess, previousGuesses.length - index))}
-        </ScrollView>
+        <FlatList
+          keyExtractor={key => key}
+          contentContainerStyle={styles.list}
+          data={previousGuesses}
+          renderItem={renderListItem.bind(this, previousGuesses.length)}
+        />
       </View>
     </View>
   );
@@ -124,8 +125,8 @@ const styles = StyleSheet.create({
   list: {
     // "To be able to grow and take as much space as it can get" - perfect for scrollable
     flexGrow: 1,
-    // Important if list item won't have width of 100%
-    alignItems: 'center',
+    // Important if list item won't have width of 100%. Working for ScrollableView
+    // alignItems: 'center',
   },
   listItem: {
     borderColor: 'black',
@@ -136,12 +137,12 @@ const styles = StyleSheet.create({
     // important to keep our list item's 1 per line!
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: '60%',
+    width: '100%',
   },
   listContainer: {
     // Flex = 1 is needed on Android to make Scrollable inside really Scrollable
     flex: 1,
-    width: '80%',
+    width: '70%',
   },
 });
 
