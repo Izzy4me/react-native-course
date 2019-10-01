@@ -10,7 +10,8 @@ import {
   StyleSheet,
   Alert,
   Button,
-  FlatList
+  FlatList,
+  Dimensions
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -48,7 +49,7 @@ const GameScreen = (props) => {
   const currentBottomBoundary = useRef(1);
   const currentTopBoundary = useRef(100);
   const { userChoice, onGameOver } = props;
-
+  
   useEffect(() => {
     if (currentGuess === userChoice) {
       onGameOver(roundsCounter);
@@ -84,6 +85,14 @@ const GameScreen = (props) => {
     setRoundsCounter(currentRound => currentRound + 1);
   }
 
+  // Styling
+  let listContainerStyle = styles.listContainer;
+  const prepareStylesForSmallerDevices = () => {
+    if (Dimensions.get('window').width < 600) {
+      listContainerStyle = styles.listContainerXS;
+    }
+  };
+
   return (
     <View style={styles.screen}>
       <Text>Opponent's Guess</Text>
@@ -96,7 +105,7 @@ const GameScreen = (props) => {
             <Ionicons name="md-add-circle" size={24}></Ionicons>
         </CustomButton>
       </Card>
-      <View style={styles.listContainer}>
+      <View style={styles.listContainerStyle}>
         <FlatList
           keyExtractor={key => key}
           contentContainerStyle={styles.list}
@@ -118,7 +127,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginTop: 20,
+    marginTop: Dimensions.get('window').height > 600 ? 20 : 5,
     width: 300,
     maxWidth: '80%'
   },
@@ -143,6 +152,11 @@ const styles = StyleSheet.create({
     // Flex = 1 is needed on Android to make Scrollable inside really Scrollable
     flex: 1,
     width: '70%',
+  },
+  // List container style for small devices
+  listContainerXS: {
+    flex: 1,
+    width: '85%',
   },
 });
 

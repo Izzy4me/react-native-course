@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, Dimensions } from 'react-native';
 import CustomButton from '../components/CustomButton';
 
 import DefaultStyles from '../constants/default-styles';
@@ -35,18 +35,18 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   imageContainer: {
-    width: 300,
-    height: 300,
-    borderRadius: 200,
+    width: Dimensions.get('window').width * 0.7,
+    height: Dimensions.get('window').width * 0.7,
+    borderRadius: Dimensions.get('window').width * 0.7 / 2,
     borderWidth: 2,
     borderColor: 'black',
     // cropping image to fit our circular borders
     overflow: 'hidden',
-    margin: 10,
+    margin: Dimensions.get('window').height / 30,
   },
   resultContainer: {
     textAlign: 'center',
-    margin: 15,
+    margin: Dimensions.get('window').height > 600 ? 15 : Dimensions.get('window').height / 60,
   }
 });
 
