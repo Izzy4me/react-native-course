@@ -49,6 +49,28 @@ const GameScreen = (props) => {
   const currentBottomBoundary = useRef(1);
   const currentTopBoundary = useRef(100);
   const { userChoice, onGameOver } = props;
+
+  // For styling
+  const [availableDeviceWidth, setAvailableDeviceWidth] = useState(
+    Dimensions.get('window').width
+  );
+  const [availableDeviceHeight, setAvailableDeviceHeight] = useState(
+    Dimensions.get('window').height
+  );
+
+  useEffect(() => {
+    const updateLayout = () => {
+      setAvailableDeviceWidth(Dimensions.get('window').width);
+      setAvailableDeviceHeight(Dimensions.get('window').height);
+    };
+    Dimensions.addEventListener('change', updateLayout);
+
+    return () => {
+      Dimensions.removeEventListener('change', updateLayout);
+    };
+  });
+  // End of styling rotate-things
+
   
   useEffect(() => {
     if (currentGuess === userChoice) {
@@ -87,11 +109,35 @@ const GameScreen = (props) => {
 
   // Styling
   let listContainerStyle = styles.listContainer;
-  const prepareStylesForSmallerDevices = () => {
-    if (Dimensions.get('window').width < 600) {
-      listContainerStyle = styles.listContainerXS;
-    }
-  };
+  if (Dimensions.get('window').width < 600) {
+    listContainerStyle = styles.listContainerXS;
+  }
+  if (availableDeviceHeight < 800) {
+    return (
+      <View style={styles.screen}>
+        <Text style>Opponent's Guess</Text>
+        <View style={styles.controls}>
+          <CustomButton onPress={nextGuessHandler.bind(this, 'lower')}>
+            <Ionicons name="md-remove-circle" size={24}></Ionicons>
+          </CustomButton>
+          <NumberContainer>{currentGuess}</NumberContainer>
+          <CustomButton onPress={nextGuessHandler.bind(this, 'greater')}>
+            <Ionicons name="md-add-circle" size={24}></Ionicons>
+          </CustomButton>
+        </View>
+        <View style={listContainerStyle}>
+          <FlatList
+              keyExtractor={key => key}
+              contentContainerStyle={styles.list}
+              data={previousGuesses}
+              renderItem={renderListItem.bind(this, previousGuesses.length)}
+          />
+        </View>
+      </View>
+    );
+  }
+  
+
 
   return (
     <View style={styles.screen}>
@@ -152,6 +198,12 @@ const styles = StyleSheet.create({
     // Flex = 1 is needed on Android to make Scrollable inside really Scrollable
     flex: 1,
     width: '70%',
+  },
+  controls: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    width: '80%'
   },
   // List container style for small devices
   listContainerXS: {
