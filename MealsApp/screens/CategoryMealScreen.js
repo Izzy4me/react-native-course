@@ -5,6 +5,7 @@ import {
   Text,
   View
 } from 'react-native';
+import { CATEGORIES } from '../data/dummy-data';
 
 const CategoryMealScreen = (props) => {
   return (
@@ -25,6 +26,16 @@ const CategoryMealScreen = (props) => {
     </View>
   );
 };
+
+CategoryMealScreen.navigationOptions = navigationData => {
+  const categoryId = navigationData.navigation.getParam('categoryId');
+  const selectedCategory = CATEGORIES.find(
+    category => category.id === categoryId
+  );
+  return {
+    headerTitle: selectedCategory.title
+  };
+}
 
 const styles = StyleSheet.create({
   screen: {
