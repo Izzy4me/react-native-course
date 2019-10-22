@@ -23,8 +23,6 @@ const CategoryGridTile = props => {
     );
 };
 
-export default CategoryGridTile;
-
 const styles = StyleSheet.create({
     gridItem: {
         flex: 1,
@@ -45,4 +43,4 @@ const styles = StyleSheet.create({
     }
 });
 
-
+export default CategoryGridTile;

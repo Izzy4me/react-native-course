@@ -36,6 +36,7 @@ const CategoriesScreen = (props) => {
       data={CATEGORIES}
       numColumns={2}
       renderItem={renderGridItem}
+      keyExtractor={(item, index) => item.id}
     />
   );
 };
