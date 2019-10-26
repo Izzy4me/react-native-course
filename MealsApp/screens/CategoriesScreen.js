@@ -7,6 +7,8 @@ import {
     TouchableOpacity,
     View
 } from 'react-native';
+import { HeaderButtons, HeaderButton, Item } from 'react-navigation-header-buttons';
+import { Ionicons } from '@expo/vector-icons';
 
 import { CATEGORIES } from '../data/dummy-data';
 import Colors from '../constants/colors'
@@ -41,8 +43,27 @@ const CategoriesScreen = (props) => {
   );
 };
 
-CategoriesScreen.navigationOptions = {
-  headerTitle: 'Meal Categories',
+
+// tmp
+const IoniconsHeaderButton = props => (
+  <HeaderButton {...props} 
+  IconComponent={Ionicons} 
+  iconSize={23} color="blue"
+  />
+);
+
+CategoriesScreen.navigationOptions = navData => {
+  return {
+    headerTitle: 'Meal Categories',
+    headerLeft: () => (
+      <HeaderButtons HeaderButtonComponent={IoniconsHeaderButton}>
+        <Item
+          iconName='ios-menu'
+          onPress={()=>{  navData.navigation.toggleDrawer();}}>
+        </Item>
+      </HeaderButtons>
+    ),
+  }
 };
 
 const styles = StyleSheet.create({

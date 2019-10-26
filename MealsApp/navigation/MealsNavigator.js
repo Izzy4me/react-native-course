@@ -77,4 +77,19 @@ const MealsFavTabNavigator =
         }
       });
 
-export default createAppContainer(MealsFavTabNavigator);
+// Future
+const FiltersNavigator = createStackNavigator({
+  Filters: FiltersScreen
+});
+FiltersNavigator.navigationOptions = {
+  headerTitle: 'Filter Meals'
+};
+
+
+const MainNavigator = createDrawerNavigator({
+  MealsFavs: MealsFavTabNavigator,
+  Filters: FiltersNavigator
+});
+
+export default createAppContainer(MainNavigator);
+// export default createAppContainer(MealsFavTabNavigator);

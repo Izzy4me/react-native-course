@@ -9,6 +9,21 @@ const FavouritesScreen = (props) => {
   );
 };
 
+FavouritesScreen.navigationOptions = navData => {
+  return {
+    headerTitle: 'Favourites Meals',
+    headerLeft: () => (
+      <Button title="Menu">
+        <Item
+          title="Menu"
+          iconName='ios-menu'
+          onPress={()=>{  navData.navigation.toggleDrawer();}}>
+        </Item>
+      </Button>
+    ),
+  }
+};
+
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
