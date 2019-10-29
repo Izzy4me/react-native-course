@@ -7,12 +7,14 @@ import {
     TouchableOpacity,
     View
 } from 'react-native';
-import { HeaderButtons, HeaderButton, Item } from 'react-navigation-header-buttons';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { Ionicons } from '@expo/vector-icons';
 
-import { CATEGORIES } from '../data/dummy-data';
-import Colors from '../constants/colors'
+import HeaderButton from '../components/HeaderButton';
 import CategoryGridTile from '../components/CategoryGridTile';
+
+import Colors from '../constants/colors';
+import { CATEGORIES } from '../data/dummy-data';
 
 
 const CategoriesScreen = (props) => {
@@ -44,14 +46,6 @@ const CategoriesScreen = (props) => {
 };
 
 
-// tmp
-const IoniconsHeaderButton = props => (
-  <HeaderButton {...props} 
-  IconComponent={Ionicons} 
-  iconSize={23} color="blue"
-  />
-);
-
 CategoriesScreen.navigationOptions = navData => {
   return {
     headerTitle: 'Meal Categories',
@@ -74,11 +68,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center'
-  },
-  gridItem: {
-    flex: 1,
-    margin: 15,
-    height: 150,
   }
 });
 

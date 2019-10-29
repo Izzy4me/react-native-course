@@ -3,30 +3,31 @@ import { View, Text, StyleSheet } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
 import HeaderButton from '../components/HeaderButton';
+import { MEALS } from '../data/dummy-data';
 
-const FiltersScreen = (props) => {
+const FavoritesScreen = (props) => {
   return (
     <View style={styles.screen}>
-      <Text>The Filters Screen!</Text>
+      <Text>The Favorites Screen!</Text>
     </View>
   );
 };
 
-FiltersScreen.navigationOptions = navData => {
+FavoritesScreen.navigationOptions = navData => {
   return {
-    headerTitle: 'Filter Meals',
-    headerLeft: (
+    headerTitle: 'Favorites Meals',
+    headerLeft: () => (
       <HeaderButtons HeaderButtonComponent={HeaderButton}>
         <Item
-          title="Menu"
+          title="Menu!"
           iconName="ios-menu"
           onPress={() => {
             navData.navigation.toggleDrawer();
           }}
         />
       </HeaderButtons>
-    )
-  };
+    ),
+  }
 };
 
 const styles = StyleSheet.create({
@@ -37,4 +38,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default FiltersScreen;
+export default FavoritesScreen;
